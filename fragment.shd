@@ -19,9 +19,9 @@ void main() {
     if (question == 1) {
       output_color = interpolated_color * vec4(1.0, 1.0, 0.0, 1.0);
     }
+    // question 2
     if (question == 2) {
-      vec4 texture = texture(texture_sampler, interpolated_uv_postion);
-      output_color = interpolated_color * vec4(texture.rgb, 1.0);
+      output_color = interpolated_color;
     }
   }
 }
