@@ -10,7 +10,7 @@ uniform sampler2D normalmap_sampler;
 layout(location=0) out vec4 output_color;
 
 int part = 2;
-int question = 1;
+int question = 2;
 
 void main() {
   // Partie 2
@@ -18,6 +18,10 @@ void main() {
     // question 1
     if (question == 1) {
       output_color = interpolated_color * vec4(1.0, 1.0, 0.0, 1.0);
+    }
+    if (question == 2) {
+      vec4 texture = texture(texture_sampler, interpolated_uv_postion);
+      output_color = interpolated_color * vec4(texture.rgb, 1.0);
     }
   }
 }
