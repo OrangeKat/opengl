@@ -6,6 +6,11 @@ in vec3 normalSmooth;
 in vec3 color;
 in vec2 uv;
 
+out vec4 interpolated_color;
+out vec2 interpolated_uv_postion;
+
+vec3 light_position = vec4(-1.0, 2.0, 0.0);
+
 mat4 model_view_matrix = mat4(
     0.57735, -0.33333, 0.57735, 0.00000,
     0.00000, 0.66667, 0.57735, 0.00000,
@@ -19,5 +24,9 @@ mat4 projection_matrix = mat4(
     0.00000, 0.00000, -10.00100, 0.00000);
 
 void main() {
+    vec3 light_direction = vec4(light_position - position);
+    float coef = dot(normalize(normalFlat), normalize(light_direction));
     gl_Position = projection_matrix * model_view_matrix * vec4(position, 1.0);
+    interpolated_color = vec4(vec3(1.0, 1.0, 1.0) * coef, 1.0);
+    interpolated_uv_postion = uv;
 }

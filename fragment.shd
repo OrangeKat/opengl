@@ -1,6 +1,7 @@
 #version 450
 
-in vec3 fragColor;
+in vec4 interpolated_color;
+in vec2 interpolated_uv_postion;
 
 uniform sampler2D texture_sampler;
 uniform sampler2D lighting_sampler;
@@ -8,16 +9,15 @@ uniform sampler2D normalmap_sampler;
 
 layout(location=0) out vec4 output_color;
 
-int mode = 1;
+int part = 2;
+int question = 1;
 
 void main() {
-    if (mode == 1) {
-        output_color = vec4(1.0, 1.0, 0.0, 1.0);
+  // Partie 2
+  if (part == 2) {
+    // question 1
+    if (question == 1) {
+      output_color = interpolated_color * vec4(1.0, 1.0, 0.0, 1.0);
     }
-    else if (mode == 2) {
-        output_color = vec4(fragColor, 1.0);
-    }
-    else if (mode == 3) {
-        output_color = vec4(fragColor, 1.0);
-    }
+  }
 }
