@@ -6,16 +6,6 @@ in vec3 normalSmooth;
 in vec3 color;
 in vec2 uv;
 
-out vec3 fragColor;
-out vec3 fragNormalFlat;
-out vec3 fragNormalSmooth;
-out vec2 fragUV;
-out vec3 fragPosition;
-out vec3 worldPosition;
-
-vec3 light_color = vec3(1.0, 1.0, 1.0);
-vec3 light_position = vec3(1.0, 1.0, 5.0);
-
 mat4 model_view_matrix = mat4(
     0.57735, -0.33333, 0.57735, 0.00000,
     0.00000, 0.66667, 0.57735, 0.00000,
@@ -30,12 +20,4 @@ mat4 projection_matrix = mat4(
 
 void main() {
     gl_Position = projection_matrix * model_view_matrix * vec4(position, 1.0);
-    
-    fragColor = color;
-    fragNormalFlat = normalize(mat3(model_view_matrix) * normalFlat);
-    fragNormalSmooth = normalize(mat3(model_view_matrix) * normalSmooth);
-    fragUV = uv;
-    
-    fragPosition = vec3(model_view_matrix * vec4(position, 1.0));
-    worldPosition = position;
 }
