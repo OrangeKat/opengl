@@ -9,8 +9,8 @@ uniform sampler2D normalmap_sampler;
 
 layout(location=0) out vec4 output_color;
 
-int part = 2;
-int question = 2;
+int part = 4;
+int question = 1;
 
 void main() {
   // Partie 2
@@ -19,9 +19,29 @@ void main() {
     if (question == 1) {
       output_color = interpolated_color * vec4(1.0, 1.0, 0.0, 1.0);
     }
-    // question 2
-    if (question == 2) {
+    // question 2 / 3
+    if (question >= 2) {
       output_color = interpolated_color;
+    }
+  }
+
+  //Partie 3
+  if (part == 3) {
+    // question 1
+    if (question >= 1) {
+      ouput_color = interpolated_color * vec4(0.0, 0.0, 1.0, 1.0);
+    }
+  }
+
+  //Partie 4
+  if (part == 4) {
+    // question 1
+    if (question == 1) {
+      output_color = interpolated_color * vec4(interpolated_uv_postion.u, interpolated_uv_postion.v, 0.0, 1.0);
+    }
+    if (question >= 2) {
+      vec4 texture = texture(texture_sampler, interpolated_uv_postion);
+      output_color = interpolated_color * vec4(texture.rgb, 1.0);
     }
   }
 }
