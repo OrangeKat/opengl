@@ -29,7 +29,6 @@ include_directories(${GLEW_INCLUDE_DIRS})
 set(SOURCES
     src/main.cpp
     src/fire_shader.cpp
-    src/shader.cpp
 )
 
 # Create executable
@@ -54,7 +53,7 @@ install(TARGETS ${PROJECT_NAME}
 
 # Custom targets
 add_custom_target(run
-    COMMAND ${CMAKE_BINARY_DIR}/bin/${PROJECT_NAME}
+    COMMAND ${CMAKE_BINARY_DIR}/${PROJECT_NAME}
     DEPENDS ${PROJECT_NAME}
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )

@@ -1,12 +1,32 @@
 #include "fire_shader.hh"
-#include "shader.hh"
 #include <iostream>
+#include <fstream>
+#include <sstream>
 
 FireShader::FireShader()
     : shaderProgram(0), VAO(0), VBO(0), EBO(0), intensity(1.5f), speed(1.0f),
-      octaves(6), scale(3.0f) {}
+      octaves(6), scale(3.0f), noise_type(0) {}
 
 FireShader::~FireShader() { cleanup(); }
+
+// Helper function to load shader from file
+std::string loadShaderFromFile(const char* filePath) {
+    std::string shaderCode;
+    std::ifstream shaderFile;
+    shaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+    
+    try {
+        shaderFile.open(filePath);
+        std::stringstream shaderStream;
+        shaderStream << shaderFile.rdbuf();
+        shaderFile.close();
+        shaderCode = shaderStream.str();
+    } catch (std::ifstream::failure& e) {
+        std::cerr << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ: " 
+                  << filePath << std::endl;
+    }
+    return shaderCode;
+}
 
 bool FireShader::compileShader(GLuint shader, const char *source,
                                const char *type) {
@@ -44,6 +64,7 @@ void FireShader::getUniformLocations() {
   u_speed_loc = glGetUniformLocation(shaderProgram, "u_speed");
   u_octaves_loc = glGetUniformLocation(shaderProgram, "u_octaves");
   u_scale_loc = glGetUniformLocation(shaderProgram, "u_scale");
+  u_noise_type_loc = glGetUniformLocation(shaderProgram, "u_noise_type");
 }
 
 void FireShader::setupGeometry() {
@@ -79,6 +100,13 @@ void FireShader::setupGeometry() {
 }
 
 bool FireShader::initialize() {
+  // Load shaders from files
+  std::string vertexCode = loadShaderFromFile("shaders/fire_vertex.glsl");
+  std::string fragmentCode = loadShaderFromFile("shaders/fire_fragment.glsl");
+  
+  const char* vertexShaderSource = vertexCode.c_str();
+  const char* fragmentShaderSource = fragmentCode.c_str();
+
   // Create and compile vertex shader
   GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
   if (!compileShader(vertexShader, vertexShaderSource, "Vertex")) {
@@ -126,10 +154,15 @@ void FireShader::render(float currentTime) {
   glUniform1f(u_speed_loc, speed);
   glUniform1i(u_octaves_loc, octaves);
   glUniform1f(u_scale_loc, scale);
+  glUniform1i(u_noise_type_loc, noise_type);
 
   // Render quad
   glBindVertexArray(VAO);
   glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+}
+
+void FireShader::toggleNoiseType() {
+  noise_type = 1 - noise_type; // Toggle between 0 and 1
 }
 
 void FireShader::cleanup() {
@@ -168,3 +201,5 @@ float FireShader::getSpeed() const { return speed; }
 int FireShader::getOctaves() const { return octaves; }
 
 float FireShader::getScale() const { return scale; }
+
+int FireShader::getNoiseType() const { return noise_type; }

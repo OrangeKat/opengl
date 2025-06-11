@@ -13,6 +13,7 @@ void printControls() {
   std::cout << "Fire Speed: Q-R keys (0.5x - 2.0x)" << std::endl;
   std::cout << "Noise Octaves: Z-C keys (3, 6, 8)" << std::endl;
   std::cout << "Fire Scale: A-D keys (2.0x - 4.0x)" << std::endl;
+  std::cout << "Toggle Noise Type: N key" << std::endl;
   std::cout << "Reset to defaults: SPACE" << std::endl;
   std::cout << "Exit: ESC" << std::endl;
   std::cout << "================================\n" << std::endl;
@@ -93,6 +94,14 @@ void keyCallback(GLFWwindow *window, int key, int scancode, int action,
       std::cout << "Fire scale: 4.0x" << std::endl;
       break;
 
+    // Toggle noise type
+    case GLFW_KEY_N:
+      g_fireShader->toggleNoiseType();
+      std::cout << "Noise type: " 
+                << (g_fireShader->getNoiseType() == 0 ? "Simplex" : "Perlin")
+                << std::endl;
+    break;
+
     // Reset to defaults
     case GLFW_KEY_SPACE:
       g_fireShader->setIntensity(1.5f);
@@ -131,7 +140,7 @@ GLFWwindow *createWindow() {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-  glfwWindowHint(GLFW_SAMPLES, 4); // 4x MSAA
+  glfwWindowHint(GLFW_SAMPLES, 4);
 
 #ifdef __APPLE__
   glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -147,7 +156,7 @@ GLFWwindow *createWindow() {
   }
 
   glfwMakeContextCurrent(window);
-  glfwSwapInterval(1); // Enable vsync
+  glfwSwapInterval(1);
 
   return window;
 }

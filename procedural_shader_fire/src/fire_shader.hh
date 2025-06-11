@@ -2,6 +2,7 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <string>
 
 class FireShader {
 private:
@@ -14,6 +15,9 @@ private:
   GLint u_speed_loc;
   GLint u_octaves_loc;
   GLint u_scale_loc;
+  GLint u_mouse_loc;
+  GLint u_noise_type_loc;
+  int noise_type;         // 0 = simplex, 1 = perlin
 
   // Fire parameters
   float intensity;
@@ -34,6 +38,8 @@ public:
   bool initialize();
   void render(float currentTime);
   void cleanup();
+  void setMousePosition(float x, float y); // Added mouse position setter
+  void toggleNoiseType(); // Added to toggle noise type
 
   // Parameter setters
   void setIntensity(float value);
@@ -46,4 +52,5 @@ public:
   float getSpeed() const;
   int getOctaves() const;
   float getScale() const;
+  int getNoiseType() const;
 };
